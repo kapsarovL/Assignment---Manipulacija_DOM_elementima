@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <title>Assignment 2 - Website Building</title>
+        <style>
+            body {
+                box-sizing: border-box;
+                font-family: sans-serif;
+            }
+
+            #login-container {
+                width: 460px;
+                margin: 0 auto;
+            }
+
+            form label,
+            form input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            form input {
+                padding: 8px;
+            }
+
+            form label {
+                font-weight: bold;
+            }
+
+            form div {
+                margin: 16px 0px;
+            }
+
+            .input:focus {
+                background-color: hsl(0, 0%, 83%);
+            }
+
+            .input[type="submit"] {
+                background-color: hsl(120, 100%, 25%);
+                color: hsl(0, 0%, 100%);
+                border: none;
+                cursor: pointer;
+            }
+
+            .username-error {
+                background-color: hsl(0, 100%, 50%);
+                color: hsl(0, 0%, 100%);
+                padding: 5px;
+                text-align: center;
+            }
+
+            .password-error {
+                background-color: hsl(0, 100%, 50%);
+                color: hsl(0, 0%, 100%);
+                padding: 5px;
+                text-align: center;
+            }
+
+            .successful-login {
+                background-color: hsl(120, 100%, 25%);
+                color: hsl(0, 0%, 100%);
+                padding: 5px;
+                text-align: center;
+            }
+
+            .error-border {
+                border: 2px solid hsl(0, 100%, 50%);  
+            }
+
+            .icon-error {
+                color: hsl(0, 100%, 50%);
+                font-size: 1.5em;
+                position: absolute;
+                transform: translate(-30px, 5px);
+            }
+
+            .icon-success {
+                color: hsl(120, 100%, 25%);
+                font-size: 1.5em;
+                position: absolute;
+                transform: translate(-30, 5px);
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="login-container">
+
+            <form>
+                <div>
+                    <label for="username">Username:</label>
+                    <input id="username" type="text">
+                </div>
+
+                <div>
+                    <label for="password">Password:</label>
+                    <input id="password" type="password">
+                </div>
+
+                <input type="submit" value="Login">
+            </form>
+
+        </div>
+
+<script src="js/jquery-3.6.3.slim.min.js"></script>
+
+<script> 
+// Username And Password Data //
+const username_data = 'new_user';
+const password_data = '123456789';
+// Submit Event //
+$('#login-container').submit((e)=>{
+    e.preventDefault();
+    // Username And Password Values //
+    const username_value = $('#username').val();
+    const password_value = $('#password').val();
+    // Messages //
+    const invalid_username = ('<div class="username-error"><p>* Please, enter valid username</p></div>')
+    const empty_username = ('<div class="username-error"><p>* Please, enter username</p></div>')
+    const invalid_password = ('<div class="password-error"><p>* Please, enter valid password</p></div>')
+    const empty_password = ('<div class="password-error"><p>* Please, enter password</p></div>')
+    const successful_login = ('<div class="successful-login"><p>Successful login!</p></div>')
+    // Icons //
+    const icon_success = ('<i class="fas fa-check icon-success"></i>')
+    const icon_error = ('<i class="fas fa-times icon-error"></i>')
+    // Removing Errors //
+    $('.username-error').remove();
+    $('.password-error').remove();
+    $('.successful-login').remove();
+    $('input').removeClass('error-border');
+    $('input').removeClass('success-border');
+    $('.fas').remove();
+    // Success Login //
+    if(username_value == username_data && password_value == password_data) {
+        $('from').append(successful_login);
+        $('#username').addClass('success-border').after(icon_success);
+        $('#password').addClass('success-border').after(icon_success);
+    }
+    // User Empty And Pass Key //
+    else if (username_value.length == 0 && password_value.length == 0){ 
+        $('from').append(empty_password);
+        $('#username').addClass('error-border').after(icon_error);
+        $('form').append(empty_password);
+        $('#password').addClass('error-border').after(icon_error);
+    }
+    // User Correct And Pass Empty //
+    else if (username_value == username_data && password_value.length == 0){
+                    $('#username').addClass('success-border').after(icon_success);
+                    $('form').append(empty_password);
+                    $('#password').addClass('error-border').after(icon_error);
+                } 
+    // User Correct And Pass Wrong // 
+    else if (username_value == username_data && password_value != password_data) {
+                    $('#username').addClass('success-border').after(icon_success);
+                    $('form').append(invalid_password);
+                    $('#password').addClass('error-border').after(icon_error);
+                } 
+    // User Empty And Pass Correct //
+    else if (username_value.length == 0 && password_value == password_data){ 
+                    $('form').append(empty_username);
+                    $('#username').addClass('error-border').after(icon_error);
+                    $('#password').addClass('success-border').after(icon_success);
+                } 
+    // User Empty And Pass Wrong //
+    else if (username_value.length == 0 && password_value != password_data){
+                    $('form').append(empty_username);
+                    $('#username').addClass('error-border').after(icon_error);
+                    $('form').append(invalid_password);
+                    $('#password').addClass('error-border').after(icon_error);
+                } 
+    // User Wrong Pass Correct // 
+    else if (username_value != username_data && password_value == password_data){
+                    $('form').append(invalid_username);
+                    $('#username').addClass('error-border').after(icon_error);
+                    $('#password').addClass('success-border').after(icon_success);
+                } 
+    // User Wrong And Pass Empty //
+    else if (username_value != username_data && password_value.length == 0){
+                    $('form').append(invalid_username);
+                    $('#username').addClass('error-border').after(icon_error);
+                    $('form').append(empty_password);
+                    $('#password').addClass('error-border').after(icon_error);
+                }
+    // User Wrong And Pass Wrong //
+    else if (username_value != username_data && password_value != password_data){
+                    $('form').append(invalid_username);
+                    $('#username').addClass('error-border').after(icon_error);
+                    $('form').append(invalid_password);
+                    $('#password').addClass('error-border').after(icon_error);
+                }
+});
+
+</script>
+    </body>
+</html>
